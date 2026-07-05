@@ -350,8 +350,12 @@ app.use(errorHandler);
 
 if (process.env.NODE_ENV !== "test") {
   await ensureDb();
-  app.listen(config.port, () => {
-    console.log(`Fashion Source BD API running on http://localhost:${config.port}`);
-    if (!dbReady) console.log(`MongoDB not connected yet: ${dbError}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(config.port, () => {
+      console.log(`Fashion Source BD API running on http://localhost:${config.port}`);
+      if (!dbReady) console.log(`MongoDB not connected yet: ${dbError}`);
+    });
+  }
 }
+
+export default app;
