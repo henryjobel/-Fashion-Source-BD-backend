@@ -772,6 +772,7 @@ const seedNavigation = {
       sort_order: 4,
       children: [
         { label: "Contact", url: "/contact", sort_order: 1 },
+        { label: "Our Profile", url: "/our-profile", sort_order: 2 },
       ],
     },
     { label: "Become Supplier", url: "/become-supplier", sort_order: 5, children: [] },
