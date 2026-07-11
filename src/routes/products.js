@@ -1,4 +1,5 @@
 import { Router } from "express";
+import mongoose from "mongoose";
 import { z } from "zod";
 
 import { requireAuth } from "../middleware/auth.js";
@@ -10,7 +11,12 @@ export const productsRouter = Router();
 
 const productSchema = z.object({
   category_id: z.union([z.string(), z.number()]).nullable().optional(),
-  category: z.string().nullable().optional(),
+  // Admin panel PUTs the product back as fetched, where category may be a
+  // populated object — accept it and resolve to an id server-side.
+  category: z
+    .union([z.string(), z.object({ id: z.string().optional() }).passthrough()])
+    .nullable()
+    .optional(),
   category_slug: z.string().nullable().optional(),
   slug: z.string().optional(),
   name: z.string().min(1),
@@ -44,7 +50,7 @@ productsRouter.post(
   requireAuth,
   asyncHandler(async (req, res) => {
     const body = productSchema.parse(req.body);
-    const slug = slugify(body.slug || body.name);
+    const slug = await uniqueSlug(slugify(body.slug || body.name));
     const category = await resolveCategory(body);
     const product = await Product.create({
       category,
@@ -66,8 +72,12 @@ productsRouter.put(
   requireAuth,
   asyncHandler(async (req, res) => {
     const body = productSchema.partial().parse(req.body);
-    const slug = body.slug ? slugify(body.slug) : undefined;
-    const category = body.category || body.category_slug ? await resolveCategory(body) : undefined;
+    const slug = body.slug ? await uniqueSlug(slugify(body.slug), req.params.id) : undefined;
+    const hasCategoryInput =
+      body.category !== undefined ||
+      body.category_id !== undefined ||
+      body.category_slug !== undefined;
+    const category = hasCategoryInput ? await resolveCategory(body) : undefined;
     await Product.findByIdAndUpdate(
       req.params.id,
       removeUndefined({ ...body, slug, category }),
@@ -86,14 +96,33 @@ productsRouter.delete(
   }),
 );
 
+// Slug ordering: the category select in the admin panel works off slugs, so a
+// changed slug is the freshest signal; ids may be stale copies of the old value.
 async function resolveCategory(body) {
-  if (body.category) return body.category;
-  if (body.category_id) return String(body.category_id);
   if (body.category_slug) {
     const category = await Category.findOne({ slug: body.category_slug });
-    return category?._id || null;
+    if (category) return category._id;
+  }
+  const raw =
+    body.category_id ??
+    (body.category && typeof body.category === "object" ? body.category.id : body.category);
+  if (raw && mongoose.isValidObjectId(String(raw))) {
+    const category = await Category.findById(String(raw));
+    if (category) return category._id;
   }
   return null;
+}
+
+async function uniqueSlug(base, excludeId = null) {
+  const root = base || "product";
+  let candidate = root;
+  for (let n = 2; ; n += 1) {
+    const clash = await Product.exists(
+      excludeId ? { slug: candidate, _id: { $ne: excludeId } } : { slug: candidate },
+    );
+    if (!clash) return candidate;
+    candidate = `${root}-${n}`;
+  }
 }
 
 function formatProduct(product) {
@@ -101,6 +130,7 @@ function formatProduct(product) {
   value.category_id = value.category?.id || null;
   value.category_slug = value.category?.slug || "";
   value.category_title = value.category?.title || "";
+  value.category = value.category_id;
   return value;
 }
 

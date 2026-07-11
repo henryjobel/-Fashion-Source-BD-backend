@@ -43,33 +43,144 @@ const seedCategories = [
   },
 ];
 
+const seedSubCategories = [
+  {
+    slug: "mens-knit-lingerie",
+    title: "Men's Knit & Lingerie",
+    parent: "knit",
+    intro: "Men's knit tops and intimate essentials including T-shirts, polos, tanks, boxers and briefs.",
+    description: "Men's knit and lingerie programs cover jersey tops, polo shirts, tank tops and underwear silhouettes with buyer-specific fabrics, trims and packaging.",
+    sort_order: 1,
+    status: "active",
+  },
+  {
+    slug: "ladies-knit",
+    title: "Ladies Knit",
+    parent: "knit",
+    intro: "Ladies T-shirts, tanks, lounge pieces, nightwear and stretch-led styles.",
+    description: "Ladies knit categories support soft-touch tops, nightwear, swimwear and comfort-focused fashion programs.",
+    sort_order: 2,
+    status: "active",
+  },
+  {
+    slug: "kids-baby-knit",
+    title: "Kids & Baby Knit",
+    parent: "knit",
+    intro: "Kids T-shirts, dresses, jogging sets, baby T-shirts and rompers.",
+    description: "Kids and baby knitwear focuses on soft hand feel, safe trims, durable seams and playful print or applique options.",
+    sort_order: 3,
+    status: "active",
+  },
+  {
+    slug: "fleece",
+    title: "Fleece",
+    parent: "knit",
+    intro: "Sweatshirts, bonded jackets, polar fleece and micro fleece.",
+    description: "Fleece programs include brushed back, bonded, polar and micro fleece styles for casual, outdoor and layering use.",
+    sort_order: 4,
+    status: "active",
+  },
+  {
+    slug: "shirts",
+    title: "Shirts",
+    parent: "woven",
+    intro: "Casual, formal and overshirt programs in woven fabrics.",
+    description: "Woven shirts support formal and casual collars, yarn-dyed checks, solid fabrics, washes and easy-care finishing.",
+    sort_order: 1,
+    status: "active",
+  },
+  {
+    slug: "ladies-woven",
+    title: "Ladies Woven",
+    parent: "woven",
+    intro: "Ladies woven tops, blouses, tunics and dresses.",
+    description: "Ladies woven development covers viscose, cotton and blended fabrics with print, embroidery and fashion detailing.",
+    sort_order: 2,
+    status: "active",
+  },
+  {
+    slug: "woven-bottoms",
+    title: "Woven Bottoms",
+    parent: "woven",
+    intro: "Trousers, chinos, joggers, cargo shorts, swim shorts and denim shorts.",
+    description: "Woven bottoms include casual and structured silhouettes with elastic or fixed waistbands, utility details and wash finishing.",
+    sort_order: 3,
+    status: "active",
+  },
+  {
+    slug: "woven-outerwear",
+    title: "Woven Outerwear",
+    parent: "woven",
+    intro: "Jackets, blazers, parkas, bombers and seasonal outerwear.",
+    description: "Outerwear programs cover shell and insulated builds, technical linings, zipper details, hood options and buyer-specific fabrics.",
+    sort_order: 4,
+    status: "active",
+  },
+  {
+    slug: "woven-nightwear-workwear",
+    title: "Nightwear & Workwear",
+    parent: "woven",
+    intro: "Woven pajama sets, lounge pieces and durable workwear.",
+    description: "Nightwear and workwear programs combine breathable comfort pieces with reinforced industrial and uniform garments.",
+    sort_order: 5,
+    status: "active",
+  },
+  {
+    slug: "sweaters",
+    title: "Sweaters",
+    parent: "flat-knit",
+    intro: "Flat knit sweaters from 3gg to 14gg.",
+    description: "Sweater programs include crew necks, V-necks, cardigans, jacquard, cable and intarsia styles in cotton, acrylic and wool blends.",
+    sort_order: 1,
+    status: "active",
+  },
+  {
+    slug: "accessories",
+    title: "Accessories",
+    parent: "others",
+    intro: "Caps and selected accessory programs.",
+    description: "Accessory sourcing supports branded decoration, adjustable closures, trims and buyer-ready packaging.",
+    sort_order: 1,
+    status: "active",
+  },
+  {
+    slug: "home-textile",
+    title: "Home Textile",
+    parent: "others",
+    intro: "Bed sheets, towels and selected home textile products.",
+    description: "Home textile products include bed sheet sets and towels in buyer-specific sizes, GSM ranges, colors and packaging.",
+    sort_order: 2,
+    status: "active",
+  },
+];
+
 // ── Products ───────────────────────────────────────────────────────────────────
 const seedProducts = [
   // Knit
-  { slug: "mens-t-shirt-polo-tank-top", category: "knit", name: "Men's T-Shirt, Polo, Tank Top", short_name: "Men's", description: "Crew neck, V-neck, polo and tank silhouettes in buyer-ready jersey and pique fabrics.", image_url: img("photo-1521572163474-6864f9cf17ab"), specs: ["Cotton, CVC and blended jersey", "Multiple GSM options", "Print, embroidery and wash support"], sort_order: 1 },
-  { slug: "ladies-t-shirt-tank-top-nightwear", category: "knit", name: "Ladies T-Shirt, Tank Top, Nightwear", short_name: "Ladies", description: "Soft-touch ladies knitwear for fashion, lounge and sleep categories.", image_url: img("photo-1515886657613-9f3515b0c78f"), specs: ["Relaxed and fashion fits", "Modal and cotton blend options", "Seasonal color development"], sort_order: 2 },
-  { slug: "kids-t-shirt-dress-jogging-set", category: "knit", name: "Kids T-Shirt, Dress, Jogging Top, Jogging Pant", short_name: "Kids", description: "Comfort-focused childrenswear with playful styling and durable finishing.", image_url: img("photo-1503919545889-aef636e10ad4"), specs: ["Age-appropriate sizing", "Soft rib and elastic trims", "Print and applique options"], sort_order: 3 },
-  { slug: "fleece-sweatshirt-jacket", category: "knit", name: "Fleece Sweatshirt, Bonded Jacket, Polar & Micro Fleece", short_name: "Fleece", description: "Warm fleece products for casual, outdoor and layering programs.", image_url: img("photo-1551028719-00167b16eac5"), specs: ["Brushed back fleece", "Bonded and micro fleece", "Hoodie, crew and jacket builds"], sort_order: 4 },
-  { slug: "babies-t-shirt", category: "knit", name: "Babies T-Shirt", short_name: "Babies", description: "Soft infant tops designed for comfort, easy care and everyday wear.", image_url: img("photo-1519689680058-324335c77eba"), specs: ["Organic cotton options", "Nickel-free trims", "Soft hand feel finishing"], sort_order: 5 },
-  { slug: "baby-rompers", category: "knit", name: "Baby Rompers", short_name: "Baby Rompers", description: "One-piece baby rompers and bodysuits with gentle fabrics and practical fastening.", image_url: img("photo-1522771930-78848d9293e8"), specs: ["Snap-front and envelope neck options", "Printed and solid bodies", "Infant-safe construction"], sort_order: 6 },
-  { slug: "ladies-lingerie-swimwear", category: "knit", name: "Ladies Bra, Bikini & Swimwear", short_name: "Lingerie", description: "Knit lingerie and swim styles with stretch, recovery and lining control.", image_url: img("photo-1543076447-215ad9ba6923"), specs: ["Elastane blend fabrics", "Printed swim and solid basics", "Fit and trim development"], sort_order: 7 },
-  { slug: "underwear-boxer-brief-panty", category: "knit", name: "Underwear Boxer, Brief, Panty, Hipster, Thong", short_name: "Underwear", description: "Essential underwear categories in cotton, modal and stretch blends.", image_url: img("photo-1556905055-8f358a7a47b2"), specs: ["Men's and women's silhouettes", "Waistband customization", "Comfort seam finishing"], sort_order: 8 },
+  { slug: "mens-t-shirt-polo-tank-top", category: "mens-knit-lingerie", name: "Men's T-Shirt, Polo, Tank Top", short_name: "Men's", description: "Crew neck, V-neck, polo and tank silhouettes in buyer-ready jersey and pique fabrics.", image_url: img("photo-1521572163474-6864f9cf17ab"), specs: ["Cotton, CVC and blended jersey", "Multiple GSM options", "Print, embroidery and wash support"], sort_order: 1 },
+  { slug: "ladies-t-shirt-tank-top-nightwear", category: "ladies-knit", name: "Ladies T-Shirt, Tank Top, Nightwear", short_name: "Ladies", description: "Soft-touch ladies knitwear for fashion, lounge and sleep categories.", image_url: img("photo-1515886657613-9f3515b0c78f"), specs: ["Relaxed and fashion fits", "Modal and cotton blend options", "Seasonal color development"], sort_order: 2 },
+  { slug: "kids-t-shirt-dress-jogging-set", category: "kids-baby-knit", name: "Kids T-Shirt, Dress, Jogging Top, Jogging Pant", short_name: "Kids", description: "Comfort-focused childrenswear with playful styling and durable finishing.", image_url: img("photo-1503919545889-aef636e10ad4"), specs: ["Age-appropriate sizing", "Soft rib and elastic trims", "Print and applique options"], sort_order: 3 },
+  { slug: "fleece-sweatshirt-jacket", category: "fleece", name: "Fleece Sweatshirt, Bonded Jacket, Polar & Micro Fleece", short_name: "Fleece", description: "Warm fleece products for casual, outdoor and layering programs.", image_url: img("photo-1551028719-00167b16eac5"), specs: ["Brushed back fleece", "Bonded and micro fleece", "Hoodie, crew and jacket builds"], sort_order: 4 },
+  { slug: "babies-t-shirt", category: "kids-baby-knit", name: "Babies T-Shirt", short_name: "Babies", description: "Soft infant tops designed for comfort, easy care and everyday wear.", image_url: img("photo-1519689680058-324335c77eba"), specs: ["Organic cotton options", "Nickel-free trims", "Soft hand feel finishing"], sort_order: 5 },
+  { slug: "baby-rompers", category: "kids-baby-knit", name: "Baby Rompers", short_name: "Baby Rompers", description: "One-piece baby rompers and bodysuits with gentle fabrics and practical fastening.", image_url: img("photo-1522771930-78848d9293e8"), specs: ["Snap-front and envelope neck options", "Printed and solid bodies", "Infant-safe construction"], sort_order: 6 },
+  { slug: "ladies-lingerie-swimwear", category: "ladies-knit", name: "Ladies Bra, Bikini & Swimwear", short_name: "Lingerie", description: "Knit lingerie and swim styles with stretch, recovery and lining control.", image_url: img("photo-1543076447-215ad9ba6923"), specs: ["Elastane blend fabrics", "Printed swim and solid basics", "Fit and trim development"], sort_order: 7 },
+  { slug: "underwear-boxer-brief-panty", category: "mens-knit-lingerie", name: "Underwear Boxer, Brief, Panty, Hipster, Thong", short_name: "Underwear", description: "Essential underwear categories in cotton, modal and stretch blends.", image_url: img("photo-1556905055-8f358a7a47b2"), specs: ["Men's and women's silhouettes", "Waistband customization", "Comfort seam finishing"], sort_order: 8 },
   // Woven
-  { slug: "shirts", category: "woven", name: "Shirts", short_name: "Shirts", description: "Casual, formal and overshirt styles in cotton, linen and blended woven fabrics.", image_url: img("photo-1598033129183-c4f50c736f10"), specs: ["Formal and casual collars", "Yarn dyed and solid fabric", "Wash and easy-care options"], sort_order: 1 },
-  { slug: "ladies-woven-tops-dress", category: "woven", name: "Ladies Woven Tops & Dress", short_name: "Ladies Woven Tops, Dress", description: "Blouses, tunics and dresses with clean finishing and fashion detailing.", image_url: img("photo-1485968579580-b6d095142e6e"), specs: ["Viscose, cotton and blends", "Embroidery and print support", "Midi, maxi and blouse shapes"], sort_order: 2 },
-  { slug: "woven-bottom", category: "woven", name: "Woven Bottom", short_name: "Woven Bottom", description: "Chinos, trousers, joggers and tailored bottoms for casual and structured programs.", image_url: img("photo-1542272604-787c3835535d"), specs: ["Twill and canvas options", "Elastic and fixed waistband", "Garment dye and wash finishing"], sort_order: 3 },
-  { slug: "cargo-shorts", category: "woven", name: "Cargo Shorts", short_name: "Cargo Shorts", description: "Utility cargo shorts and casual shorts with pocket and trim customization.", image_url: img("photo-1506629905607-d9f297d42596"), specs: ["Multi-pocket construction", "Cotton twill and ripstop", "Washed and garment-dyed finishes"], sort_order: 4 },
-  { slug: "swimming-wear-denim-shorts", category: "woven", name: "Swimming Wear & Denim Shorts", short_name: "Swimming Wear", description: "Quick-dry swim shorts and lightweight denim shorts for seasonal programs.", image_url: img("photo-1503342217505-b0a15ec3261c"), specs: ["Quick-dry shells", "Mesh lining options", "Lightweight denim washes"], sort_order: 5 },
-  { slug: "jacket", category: "woven", name: "Jacket", short_name: "Jacket", description: "Padded, twill, windbreaker, parka and bomber jackets across seasonal needs.", image_url: img("photo-1548883354-7622d03aca27"), specs: ["Shell and insulated builds", "Technical lining options", "Zipper, snap and hood details"], sort_order: 6 },
-  { slug: "nightwear", category: "woven", name: "Nightwear", short_name: "Nightwear", description: "Woven pajama sets and lounge pieces in breathable fabrics.", image_url: img("photo-1558769132-cb1aea458c5e"), specs: ["Cotton and viscose options", "Piping and contrast details", "Set and separates development"], sort_order: 7 },
-  { slug: "workwear", category: "woven", name: "Workwear", short_name: "Workwear", description: "Durable workwear with reinforced construction for industrial and uniform programs.", image_url: img("photo-1504917595217-d4dc5ebe6122"), specs: ["Reinforced seams", "Heavy twill and canvas", "Utility pocket engineering"], sort_order: 8 },
-  { slug: "blazer", category: "woven", name: "Blazer", short_name: "Blazer", description: "Casual and structured blazers with buyer-specific fabrics and silhouettes.", image_url: img("photo-1507679799987-c73779587ccf"), specs: ["Structured and soft tailoring", "Lining and trim options", "Wool blend and cotton options"], sort_order: 9 },
+  { slug: "shirts", category: "shirts", name: "Shirts", short_name: "Shirts", description: "Casual, formal and overshirt styles in cotton, linen and blended woven fabrics.", image_url: img("photo-1598033129183-c4f50c736f10"), specs: ["Formal and casual collars", "Yarn dyed and solid fabric", "Wash and easy-care options"], sort_order: 1 },
+  { slug: "ladies-woven-tops-dress", category: "ladies-woven", name: "Ladies Woven Tops & Dress", short_name: "Ladies Woven Tops, Dress", description: "Blouses, tunics and dresses with clean finishing and fashion detailing.", image_url: img("photo-1485968579580-b6d095142e6e"), specs: ["Viscose, cotton and blends", "Embroidery and print support", "Midi, maxi and blouse shapes"], sort_order: 2 },
+  { slug: "woven-bottom", category: "woven-bottoms", name: "Woven Bottom", short_name: "Woven Bottom", description: "Chinos, trousers, joggers and tailored bottoms for casual and structured programs.", image_url: img("photo-1542272604-787c3835535d"), specs: ["Twill and canvas options", "Elastic and fixed waistband", "Garment dye and wash finishing"], sort_order: 3 },
+  { slug: "cargo-shorts", category: "woven-bottoms", name: "Cargo Shorts", short_name: "Cargo Shorts", description: "Utility cargo shorts and casual shorts with pocket and trim customization.", image_url: img("photo-1506629905607-d9f297d42596"), specs: ["Multi-pocket construction", "Cotton twill and ripstop", "Washed and garment-dyed finishes"], sort_order: 4 },
+  { slug: "swimming-wear-denim-shorts", category: "woven-bottoms", name: "Swimming Wear & Denim Shorts", short_name: "Swimming Wear", description: "Quick-dry swim shorts and lightweight denim shorts for seasonal programs.", image_url: img("photo-1503342217505-b0a15ec3261c"), specs: ["Quick-dry shells", "Mesh lining options", "Lightweight denim washes"], sort_order: 5 },
+  { slug: "jacket", category: "woven-outerwear", name: "Jacket", short_name: "Jacket", description: "Padded, twill, windbreaker, parka and bomber jackets across seasonal needs.", image_url: img("photo-1548883354-7622d03aca27"), specs: ["Shell and insulated builds", "Technical lining options", "Zipper, snap and hood details"], sort_order: 6 },
+  { slug: "nightwear", category: "woven-nightwear-workwear", name: "Nightwear", short_name: "Nightwear", description: "Woven pajama sets and lounge pieces in breathable fabrics.", image_url: img("photo-1558769132-cb1aea458c5e"), specs: ["Cotton and viscose options", "Piping and contrast details", "Set and separates development"], sort_order: 7 },
+  { slug: "workwear", category: "woven-nightwear-workwear", name: "Workwear", short_name: "Workwear", description: "Durable workwear with reinforced construction for industrial and uniform programs.", image_url: img("photo-1504917595217-d4dc5ebe6122"), specs: ["Reinforced seams", "Heavy twill and canvas", "Utility pocket engineering"], sort_order: 8 },
+  { slug: "blazer", category: "woven-outerwear", name: "Blazer", short_name: "Blazer", description: "Casual and structured blazers with buyer-specific fabrics and silhouettes.", image_url: img("photo-1507679799987-c73779587ccf"), specs: ["Structured and soft tailoring", "Lining and trim options", "Wool blend and cotton options"], sort_order: 9 },
   // Flat Knit
-  { slug: "flat-knit-sweater", category: "flat-knit", name: "Flat Knit Sweater", short_name: "Flat Knit Sweater", description: "Crew, V-neck, cardigan, jacquard, intarsia and cable styles from 3gg to 14gg.", image_url: img("photo-1516762689617-e1cffcef479d"), specs: ["3gg to 14gg gauge range", "Cotton, acrylic and wool blends", "Jacquard, cable and intarsia"], sort_order: 1 },
+  { slug: "flat-knit-sweater", category: "sweaters", name: "Flat Knit Sweater", short_name: "Flat Knit Sweater", description: "Crew, V-neck, cardigan, jacquard, intarsia and cable styles from 3gg to 14gg.", image_url: img("photo-1516762689617-e1cffcef479d"), specs: ["3gg to 14gg gauge range", "Cotton, acrylic and wool blends", "Jacquard, cable and intarsia"], sort_order: 1 },
   // Others
-  { slug: "cap", category: "others", name: "Cap", short_name: "Cap", description: "Five-panel, six-panel, dad caps and trucker caps with brand-ready decoration.", image_url: img("photo-1521369909029-2afed882baee"), specs: ["Embroidery and print decoration", "Adjustable closures", "Cotton twill and mesh builds"], sort_order: 1 },
-  { slug: "bed-sheet", category: "others", name: "Bed Sheet", short_name: "Bed Sheet", description: "Cotton percale and sateen bed sheet sets in solid, yarn dyed and printed options.", image_url: img("photo-1505693416388-ac5ce068fe85"), specs: ["Percale and sateen options", "Solid and printed programs", "Set packaging support"], sort_order: 2 },
-  { slug: "towel", category: "others", name: "Towel", short_name: "Towel", description: "Bath, hand and beach towels in multiple weights, textures and constructions.", image_url: img("photo-1583847268964-b28dc8f51f92"), specs: ["Bath, hand and beach sizes", "Multiple GSM ranges", "Jacquard and dobby border options"], sort_order: 3 },
+  { slug: "cap", category: "accessories", name: "Cap", short_name: "Cap", description: "Five-panel, six-panel, dad caps and trucker caps with brand-ready decoration.", image_url: img("photo-1521369909029-2afed882baee"), specs: ["Embroidery and print decoration", "Adjustable closures", "Cotton twill and mesh builds"], sort_order: 1 },
+  { slug: "bed-sheet", category: "home-textile", name: "Bed Sheet", short_name: "Bed Sheet", description: "Cotton percale and sateen bed sheet sets in solid, yarn dyed and printed options.", image_url: img("photo-1505693416388-ac5ce068fe85"), specs: ["Percale and sateen options", "Solid and printed programs", "Set packaging support"], sort_order: 2 },
+  { slug: "towel", category: "home-textile", name: "Towel", short_name: "Towel", description: "Bath, hand and beach towels in multiple weights, textures and constructions.", image_url: img("photo-1583847268964-b28dc8f51f92"), specs: ["Bath, hand and beach sizes", "Multiple GSM ranges", "Jacquard and dobby border options"], sort_order: 3 },
 ];
 
 // ── Settings ───────────────────────────────────────────────────────────────────
@@ -811,9 +922,18 @@ async function main() {
 
   // Categories
   for (const cat of seedCategories) {
-    await Category.updateOne({ slug: cat.slug }, { $set: cat }, { upsert: true });
+    await Category.updateOne({ slug: cat.slug }, { $set: { ...cat, parent: null } }, { upsert: true });
   }
-  console.log(`✅ Categories ready (${seedCategories.length})`);
+  for (const cat of seedSubCategories) {
+    const parent = await Category.findOne({ slug: cat.parent });
+    const { parent: _parentSlug, ...rest } = cat;
+    await Category.updateOne(
+      { slug: cat.slug },
+      { $set: { ...rest, parent: parent?._id ?? null } },
+      { upsert: true },
+    );
+  }
+  console.log(`✅ Categories ready (${seedCategories.length + seedSubCategories.length})`);
 
   // Products
   for (const p of seedProducts) {
