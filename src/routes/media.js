@@ -1,5 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
+import mongoose from "mongoose";
+import { Readable } from "node:stream";
 
 import { config } from "../config.js";
 import { cloudinary } from "../cloudinary.js";
@@ -8,7 +10,14 @@ import { Media } from "../models/index.js";
 import { asyncHandler } from "../utils/async-handler.js";
 
 export const mediaRouter = Router();
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 8 * 1024 * 1024 } });
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 25 * 1024 * 1024 },
+  fileFilter(_req, file, callback) {
+    const allowed = file.mimetype.startsWith("image/") || file.mimetype === "application/pdf";
+    callback(allowed ? null : new Error("Only images and PDF files are allowed"), allowed);
+  },
+});
 
 mediaRouter.get(
   "/",
@@ -26,7 +35,10 @@ mediaRouter.post(
   asyncHandler(async (req, res) => {
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
-    const result = await uploadToCloudinary(req.file.buffer);
+    const result =
+      req.file.mimetype === "application/pdf"
+        ? await uploadPdfToGridFs(req.file, req)
+        : await uploadToCloudinary(req.file);
     const media = await Media.create({
       public_id: result.public_id,
       url: result.url,
@@ -39,6 +51,29 @@ mediaRouter.post(
   }),
 );
 
+mediaRouter.get(
+  "/files/:id/:filename?",
+  asyncHandler(async (req, res) => {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(404).json({ message: "Catalogue not found" });
+    }
+
+    const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+      bucketName: "catalogues",
+    });
+    const id = new mongoose.Types.ObjectId(req.params.id);
+    const files = await bucket.find({ _id: id }).toArray();
+    const file = files[0];
+    if (!file) return res.status(404).json({ message: "Catalogue not found" });
+
+    const safeName = String(file.filename || "catalogue.pdf").replace(/["\\\r\n]/g, "_");
+    res.setHeader("Content-Type", file.contentType || "application/pdf");
+    res.setHeader("Content-Length", file.length);
+    res.setHeader("Content-Disposition", `attachment; filename="${safeName}"`);
+    bucket.openDownloadStream(id).on("error", (error) => res.destroy(error)).pipe(res);
+  }),
+);
+
 mediaRouter.delete(
   "/:id",
   requireAuth,
@@ -46,21 +81,65 @@ mediaRouter.delete(
     const media = await Media.findById(req.params.id);
     if (!media) return res.status(404).json({ message: "Media not found" });
 
-    await cloudinary.uploader.destroy(media.public_id, { resource_type: media.resource_type || "image" }).catch(() => null);
+    if (media.public_id.startsWith("gridfs:")) {
+      const id = media.public_id.slice("gridfs:".length);
+      if (mongoose.isValidObjectId(id)) {
+        const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+          bucketName: "catalogues",
+        });
+        await bucket.delete(new mongoose.Types.ObjectId(id)).catch(() => null);
+      }
+    } else {
+      await cloudinary.uploader
+        .destroy(media.public_id, { resource_type: media.resource_type || "image" })
+        .catch(() => null);
+    }
     await media.deleteOne();
     res.json({ message: "Media deleted" });
   }),
 );
 
-function uploadToCloudinary(buffer) {
+function uploadToCloudinary(file) {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
-      { folder: config.cloudinary.folder, resource_type: "auto" },
+      {
+        folder: config.cloudinary.folder,
+        resource_type: "image",
+        use_filename: true,
+        unique_filename: true,
+        filename_override: file.originalname,
+      },
       (error, result) => {
         if (error) reject(error);
         else resolve(result);
       },
     );
-    stream.end(buffer);
+    stream.end(file.buffer);
+  });
+}
+
+function uploadPdfToGridFs(file, req) {
+  return new Promise((resolve, reject) => {
+    const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+      bucketName: "catalogues",
+    });
+    const stream = bucket.openUploadStream(file.originalname, {
+      contentType: "application/pdf",
+      metadata: { alt_text: req.body.alt_text || "" },
+    });
+    stream.on("error", reject);
+    stream.on("finish", () => {
+      const forwardedProto = req.get("x-forwarded-proto")?.split(",")[0];
+      const protocol = forwardedProto || req.protocol;
+      const filename = encodeURIComponent(file.originalname);
+      const url = `${protocol}://${req.get("host")}/api/media/files/${stream.id}/${filename}`;
+      resolve({
+        public_id: `gridfs:${stream.id}`,
+        url,
+        secure_url: url,
+        resource_type: "raw",
+      });
+    });
+    Readable.from(file.buffer).pipe(stream);
   });
 }

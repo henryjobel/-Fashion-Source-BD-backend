@@ -31,6 +31,8 @@ const categorySchema = new Schema(
     title: { type: String, required: true, trim: true },
     intro: { type: String, default: "" },
     description: { type: String, default: "" },
+    catalogue_url: { type: String, default: "" },
+    catalogue_name: { type: String, default: "" },
     parent: { type: Schema.Types.ObjectId, ref: "Category", default: null },
     sort_order: { type: Number, default: 0 },
     status: { type: String, enum: ["active", "draft"], default: "active" },
