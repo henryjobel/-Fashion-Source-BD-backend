@@ -2,7 +2,7 @@ import { Router } from "express";
 import { z } from "zod";
 
 import { requireAuth } from "../middleware/auth.js";
-import { Category } from "../models/index.js";
+import { Category, Product } from "../models/index.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { slugify } from "../utils/slug.js";
 
@@ -72,9 +72,11 @@ categoriesRouter.delete(
   "/:id",
   requireAuth,
   asyncHandler(async (req, res) => {
-    await Category.findByIdAndDelete(req.params.id);
-    await Category.updateMany({ parent: req.params.id }, { parent: null });
-    res.json({ message: "Category deleted" });
+    const descendantIds = await collectDescendantIds(req.params.id);
+    const ids = [req.params.id, ...descendantIds];
+    await Product.updateMany({ category: { $in: ids } }, { category: null });
+    await Category.deleteMany({ _id: { $in: ids } });
+    res.json({ message: "Category and its subcategories deleted" });
   }),
 );
 
@@ -86,7 +88,26 @@ async function resolveParent(parentId, selfId) {
     throw error;
   }
   const parent = await Category.findById(parentId);
+  if (selfId && parent) {
+    const descendants = await collectDescendantIds(selfId);
+    if (descendants.some((id) => id.toString() === parentId)) {
+      const error = new Error("A category cannot be moved under one of its descendants");
+      error.status = 400;
+      throw error;
+    }
+  }
   return parent?._id || null;
+}
+
+async function collectDescendantIds(parentId) {
+  const found = [];
+  let parents = [parentId];
+  while (parents.length > 0) {
+    const children = await Category.find({ parent: { $in: parents } }).select("_id");
+    parents = children.map((child) => child._id);
+    found.push(...parents);
+  }
+  return found;
 }
 
 function formatCategory(category) {

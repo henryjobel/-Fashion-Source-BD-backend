@@ -26,28 +26,34 @@ const seedCategories = [
     status: "active",
   },
   {
-    slug: "flat-knit",
-    title: "Flat Knit",
-    intro: "Flat knit sweaters from 3gg to 14gg in cotton, wool, acrylic and blended yarns.",
-    description: "Flat knit ranges include clean wardrobe staples and seasonal fashion sweaters with gauge, yarn and pattern flexibility.",
-    sort_order: 3,
-    status: "active",
-  },
-  {
     slug: "others",
     title: "Others",
     intro: "Accessories and home textile items capable of complete-package supply alongside apparel.",
     description: "Selected accessories and home textile products support broader sourcing programs with consistent quality control.",
-    sort_order: 4,
+    sort_order: 3,
     status: "active",
   },
 ];
 
 const seedSubCategories = [
+  ...["knit", "woven", "others"].flatMap((division) =>
+    ["men", "women", "kids"].map((audience, index) => ({
+      slug: `${division}-${audience}`,
+      title: audience === "men" ? "Men's" : audience === "women" ? "Women's" : "Kids",
+      parent: division,
+      intro: `${audience === "men" ? "Men's" : audience === "women" ? "Women's" : "Kids"} ${division} garment collection.`,
+      description: `Explore our complete ${audience} ${division} product range and download the catalogue for more styles.`,
+      sort_order: index + 1,
+      status: "active",
+    })),
+  ),
+  { slug: "kids-wovenwear", title: "Kids Wovenwear", parent: "woven-kids", intro: "Shirts, dresses, bottoms and light outerwear for kids.", description: "Kids woven programs with comfortable fits, safe trims and durable construction.", sort_order: 1, status: "active" },
+  { slug: "kids-accessories", title: "Kids Accessories", parent: "others-kids", intro: "Selected accessories for babies and kids.", description: "Buyer-specific kids accessory programs with safe materials and finishes.", sort_order: 1, status: "active" },
+  { slug: "womens-accessories", title: "Women's Accessories", parent: "others-women", intro: "Selected fashion and textile accessories for women.", description: "Custom-developed women's accessory programs.", sort_order: 1, status: "active" },
   {
     slug: "mens-knit-lingerie",
     title: "Men's Knit & Lingerie",
-    parent: "knit",
+    parent: "knit-men",
     intro: "Men's knit tops and intimate essentials including T-shirts, polos, tanks, boxers and briefs.",
     description: "Men's knit and lingerie programs cover jersey tops, polo shirts, tank tops and underwear silhouettes with buyer-specific fabrics, trims and packaging.",
     sort_order: 1,
@@ -56,7 +62,7 @@ const seedSubCategories = [
   {
     slug: "ladies-knit",
     title: "Ladies Knit",
-    parent: "knit",
+    parent: "knit-women",
     intro: "Ladies T-shirts, tanks, lounge pieces, nightwear and stretch-led styles.",
     description: "Ladies knit categories support soft-touch tops, nightwear, swimwear and comfort-focused fashion programs.",
     sort_order: 2,
@@ -65,7 +71,7 @@ const seedSubCategories = [
   {
     slug: "kids-baby-knit",
     title: "Kids & Baby Knit",
-    parent: "knit",
+    parent: "knit-kids",
     intro: "Kids T-shirts, dresses, jogging sets, baby T-shirts and rompers.",
     description: "Kids and baby knitwear focuses on soft hand feel, safe trims, durable seams and playful print or applique options.",
     sort_order: 3,
@@ -74,7 +80,7 @@ const seedSubCategories = [
   {
     slug: "fleece",
     title: "Fleece",
-    parent: "knit",
+    parent: "knit-men",
     intro: "Sweatshirts, bonded jackets, polar fleece and micro fleece.",
     description: "Fleece programs include brushed back, bonded, polar and micro fleece styles for casual, outdoor and layering use.",
     sort_order: 4,
@@ -83,7 +89,7 @@ const seedSubCategories = [
   {
     slug: "shirts",
     title: "Shirts",
-    parent: "woven",
+    parent: "woven-men",
     intro: "Casual, formal and overshirt programs in woven fabrics.",
     description: "Woven shirts support formal and casual collars, yarn-dyed checks, solid fabrics, washes and easy-care finishing.",
     sort_order: 1,
@@ -92,7 +98,7 @@ const seedSubCategories = [
   {
     slug: "ladies-woven",
     title: "Ladies Woven",
-    parent: "woven",
+    parent: "woven-women",
     intro: "Ladies woven tops, blouses, tunics and dresses.",
     description: "Ladies woven development covers viscose, cotton and blended fabrics with print, embroidery and fashion detailing.",
     sort_order: 2,
@@ -101,7 +107,7 @@ const seedSubCategories = [
   {
     slug: "woven-bottoms",
     title: "Woven Bottoms",
-    parent: "woven",
+    parent: "woven-men",
     intro: "Trousers, chinos, joggers, cargo shorts, swim shorts and denim shorts.",
     description: "Woven bottoms include casual and structured silhouettes with elastic or fixed waistbands, utility details and wash finishing.",
     sort_order: 3,
@@ -110,7 +116,7 @@ const seedSubCategories = [
   {
     slug: "woven-outerwear",
     title: "Woven Outerwear",
-    parent: "woven",
+    parent: "woven-men",
     intro: "Jackets, blazers, parkas, bombers and seasonal outerwear.",
     description: "Outerwear programs cover shell and insulated builds, technical linings, zipper details, hood options and buyer-specific fabrics.",
     sort_order: 4,
@@ -119,7 +125,7 @@ const seedSubCategories = [
   {
     slug: "woven-nightwear-workwear",
     title: "Nightwear & Workwear",
-    parent: "woven",
+    parent: "woven-women",
     intro: "Woven pajama sets, lounge pieces and durable workwear.",
     description: "Nightwear and workwear programs combine breathable comfort pieces with reinforced industrial and uniform garments.",
     sort_order: 5,
@@ -128,7 +134,7 @@ const seedSubCategories = [
   {
     slug: "sweaters",
     title: "Sweaters",
-    parent: "flat-knit",
+    parent: "others-men",
     intro: "Flat knit sweaters from 3gg to 14gg.",
     description: "Sweater programs include crew necks, V-necks, cardigans, jacquard, cable and intarsia styles in cotton, acrylic and wool blends.",
     sort_order: 1,
@@ -137,7 +143,7 @@ const seedSubCategories = [
   {
     slug: "accessories",
     title: "Accessories",
-    parent: "others",
+    parent: "others-men",
     intro: "Caps and selected accessory programs.",
     description: "Accessory sourcing supports branded decoration, adjustable closures, trims and buyer-ready packaging.",
     sort_order: 1,
@@ -146,7 +152,7 @@ const seedSubCategories = [
   {
     slug: "home-textile",
     title: "Home Textile",
-    parent: "others",
+    parent: "others-women",
     intro: "Bed sheets, towels and selected home textile products.",
     description: "Home textile products include bed sheet sets and towels in buyer-specific sizes, GSM ranges, colors and packaging.",
     sort_order: 2,
@@ -756,7 +762,7 @@ const seedPages = [
         field("person1Role", "Person 1 Role", "Director"),
         field("person1Initials", "Person 1 Initials", "AS"),
         field("person1Email", "Person 1 Email", "info@fashionsource-bd.com"),
-        field("person2Name", "Person 2 Name", "Md. Abdul Karim"),
+        field("person2Name", "Person 2 Name", "Md. Abdul Korim"),
         field("person2Role", "Person 2 Role", "Managing Director & CEO"),
         field("person2Initials", "Person 2 Initials", "AK"),
         field("person2Email", "Person 2 Email", "info@fashionsource-bd.com"),
@@ -920,18 +926,26 @@ async function main() {
   }
   console.log("✅ Settings ready");
 
-  // Categories
+  // Categories. This seed intentionally replaces the old category taxonomy.
+  // Products are re-linked below, so no stale category references remain.
+  await Category.deleteMany({});
   for (const cat of seedCategories) {
     await Category.updateOne({ slug: cat.slug }, { $set: { ...cat, parent: null } }, { upsert: true });
   }
-  for (const cat of seedSubCategories) {
-    const parent = await Category.findOne({ slug: cat.parent });
-    const { parent: _parentSlug, ...rest } = cat;
-    await Category.updateOne(
-      { slug: cat.slug },
-      { $set: { ...rest, parent: parent?._id ?? null } },
-      { upsert: true },
-    );
+  const pendingCategories = [...seedSubCategories];
+  while (pendingCategories.length > 0) {
+    const before = pendingCategories.length;
+    for (let index = pendingCategories.length - 1; index >= 0; index -= 1) {
+      const cat = pendingCategories[index];
+      const parent = await Category.findOne({ slug: cat.parent });
+      if (!parent) continue;
+      const { parent: _parentSlug, ...rest } = cat;
+      await Category.create({ ...rest, parent: parent._id });
+      pendingCategories.splice(index, 1);
+    }
+    if (pendingCategories.length === before) {
+      throw new Error(`Unable to resolve category parents: ${pendingCategories.map((c) => c.slug).join(", ")}`);
+    }
   }
   console.log(`✅ Categories ready (${seedCategories.length + seedSubCategories.length})`);
 
