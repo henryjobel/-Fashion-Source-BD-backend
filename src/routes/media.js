@@ -1,7 +1,6 @@
 import { Router } from "express";
 import multer from "multer";
 import mongoose from "mongoose";
-import { Readable } from "node:stream";
 
 import { config } from "../config.js";
 import { cloudinary } from "../cloudinary.js";
@@ -35,10 +34,7 @@ mediaRouter.post(
   asyncHandler(async (req, res) => {
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
-    const result =
-      req.file.mimetype === "application/pdf"
-        ? await uploadPdfToGridFs(req.file, req)
-        : await uploadToCloudinary(req.file);
+    const result = await uploadToCloudinary(req.file);
     const media = await Media.create({
       public_id: result.public_id,
       url: result.url,
@@ -101,10 +97,11 @@ mediaRouter.delete(
 
 function uploadToCloudinary(file) {
   return new Promise((resolve, reject) => {
+    const isPdf = file.mimetype === "application/pdf";
     const stream = cloudinary.uploader.upload_stream(
       {
         folder: config.cloudinary.folder,
-        resource_type: "image",
+        resource_type: isPdf ? "raw" : "image",
         use_filename: true,
         unique_filename: true,
         filename_override: file.originalname,
@@ -115,31 +112,5 @@ function uploadToCloudinary(file) {
       },
     );
     stream.end(file.buffer);
-  });
-}
-
-function uploadPdfToGridFs(file, req) {
-  return new Promise((resolve, reject) => {
-    const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
-      bucketName: "catalogues",
-    });
-    const stream = bucket.openUploadStream(file.originalname, {
-      contentType: "application/pdf",
-      metadata: { alt_text: req.body.alt_text || "" },
-    });
-    stream.on("error", reject);
-    stream.on("finish", () => {
-      const forwardedProto = req.get("x-forwarded-proto")?.split(",")[0];
-      const protocol = forwardedProto || req.protocol;
-      const filename = encodeURIComponent(file.originalname);
-      const url = `${protocol}://${req.get("host")}/api/media/files/${stream.id}/${filename}`;
-      resolve({
-        public_id: `gridfs:${stream.id}`,
-        url,
-        secure_url: url,
-        resource_type: "raw",
-      });
-    });
-    Readable.from(file.buffer).pipe(stream);
   });
 }
