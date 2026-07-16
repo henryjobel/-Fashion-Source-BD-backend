@@ -197,9 +197,9 @@ const seedSettings = {
   favicon: "",
   footerLogo: "",
   email: "info@fashionsource-bd.com",
-  phone: "+8801613341001, +880168684132",
+  phone: "+8801613341001, +8801686841325",
   address: "Zila Parishad, Fatullah, Narayanganj-1400, Dhaka, Bangladesh",
-  businessHours: "Sun - Thu: 10:00 am - 07:00 pm",
+  businessHours: "Sun - Thu: 10:00 am - 07:00 pm\nFri: 04:00 pm - 08:00 pm\nSat: Weekly Holiday",
   primaryColor: "#17b86a",
   // SEO
   seoTitle: "Fashion Source BD - Export Oriented Garments Buying House",

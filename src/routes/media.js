@@ -65,7 +65,7 @@ mediaRouter.get(
     const safeName = String(file.filename || "catalogue.pdf").replace(/["\\\r\n]/g, "_");
     res.setHeader("Content-Type", file.contentType || "application/pdf");
     res.setHeader("Content-Length", file.length);
-    res.setHeader("Content-Disposition", `attachment; filename="${safeName}"`);
+    res.setHeader("Content-Disposition", `inline; filename="${safeName}"`);
     bucket.openDownloadStream(id).on("error", (error) => res.destroy(error)).pipe(res);
   }),
 );
